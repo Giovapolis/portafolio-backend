@@ -44,6 +44,22 @@ def list_profiles(db: Session = Depends(get_db)):
     return db.query(Profile).all()
 
 
+# GET /profiles/me - Get current user's profiles (MUST BE BEFORE /{profile_id})
+@router_plural.get("/me", response_model=list[ProfileOut])
+def get_my_profiles(current_user: User = Depends(get_current_admin), db: Session = Depends(get_db)):
+    """Get all profiles for current user"""
+    profiles = db.query(Profile).filter(Profile.user_id == current_user.id).all()
+    return profiles
+
+
+# GET /profiles/user/{user_id} - Get all profiles for a user
+@router_plural.get("/user/{user_id}", response_model=list[ProfileOut])
+def get_user_profiles(user_id: int, db: Session = Depends(get_db)):
+    """Get all profiles for a specific user"""
+    profiles = db.query(Profile).filter(Profile.user_id == user_id).all()
+    return profiles
+
+
 # GET /profiles/{profile_id} - Get specific profile
 @router_plural.get("/{profile_id}", response_model=ProfileOut)
 def get_profile(profile_id: int, db: Session = Depends(get_db)):
@@ -57,22 +73,6 @@ def get_profile(profile_id: int, db: Session = Depends(get_db)):
         )
     
     return profile
-
-
-# GET /profiles/user/{user_id} - Get all profiles for a user
-@router_plural.get("/user/{user_id}", response_model=list[ProfileOut])
-def get_user_profiles(user_id: int, db: Session = Depends(get_db)):
-    """Get all profiles for a specific user"""
-    profiles = db.query(Profile).filter(Profile.user_id == user_id).all()
-    return profiles
-
-
-# GET /profiles/me - Get current user's profiles
-@router_plural.get("/me", response_model=list[ProfileOut])
-def get_my_profiles(current_user: User = Depends(get_current_admin), db: Session = Depends(get_db)):
-    """Get all profiles for current user"""
-    profiles = db.query(Profile).filter(Profile.user_id == current_user.id).all()
-    return profiles
 
 
 # ===== ADMIN ENDPOINTS - CREATE, UPDATE, DELETE =====

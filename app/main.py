@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import experience, auth, profile, projects, skills, courses, blogs, cv
+from app.api.routes import auth, blogs, courses, cv, experience, profile, projects, skills, education
 
 app = FastAPI(title="Portfolio API")
 
@@ -25,5 +25,6 @@ app.include_router(experience.router)
 app.include_router(projects.router)
 app.include_router(skills.router)
 app.include_router(courses.router)
+app.include_router(education.router)
 app.include_router(blogs.router)
 app.include_router(cv.router)

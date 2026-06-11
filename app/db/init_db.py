@@ -2,6 +2,11 @@ from app.db.session import engine, Base, SessionLocal
 from app.models.user import User
 from app.models.profile import Profile
 from app.models.blog import Blog
+from app.models.experience import Experience
+from app.models.projects import Project
+from app.models.skills import Skill
+from app.models.courses import Course
+from app.models.education import Education
 from app.core.security import hash_password
 
 ADMIN_USER = "Giovapolis"
