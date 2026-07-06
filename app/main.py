@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import auth, blogs, courses, cv, experience, profile, projects, skills, education
 
-app = FastAPI(title="Portfolio API")
+app = FastAPI(title="CV-WEB API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -12,15 +12,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Auth routes (both /auth/* and /users/*)
-app.include_router(auth.router_auth)
-app.include_router(auth.router_users)
-
-# Profile routes (both /profile/* and /profiles/*)
-app.include_router(profile.router_singular)
-app.include_router(profile.router_plural)
-
-# Other routes
+app.include_router(auth.router)
+app.include_router(profile.router)
 app.include_router(experience.router)
 app.include_router(projects.router)
 app.include_router(skills.router)

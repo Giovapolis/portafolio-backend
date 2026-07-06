@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.session import SessionLocal
+from app.db.session import get_db
 from app.models.skills import Skill
 from app.schemas.skill import SkillCreate, SkillUpdate, SkillOut
 from app.core.deps import get_current_admin
@@ -9,28 +9,18 @@ from app.core.deps import get_current_admin
 router = APIRouter(prefix="/skills", tags=["Skills"])
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-#PUBLIC
 @router.get("/", response_model=list[SkillOut])
 def get_skills(db: Session = Depends(get_db)):
     return db.query(Skill).order_by(Skill.category, Skill.order.desc()).all()
 
 
-#ADMIN
 @router.post("/", response_model=SkillOut)
 def create_skill(
     data: SkillCreate,
     db: Session = Depends(get_db),
     user=Depends(get_current_admin)
 ):
-    skill = Skill(**data.dict())
+    skill = Skill(**data.model_dump())
     db.add(skill)
     db.commit()
     db.refresh(skill)
@@ -49,7 +39,7 @@ def update_skill(
     if not skill:
         raise HTTPException(404, "Skill not found")
 
-    for key, value in data.dict().items():
+    for key, value in data.model_dump(exclude_none=True).items():
         setattr(skill, key, value)
 
     db.commit()

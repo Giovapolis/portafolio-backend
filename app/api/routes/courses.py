@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.session import SessionLocal
+from app.db.session import get_db
 from app.models.courses import Course
 from app.schemas.course import CourseCreate, CourseUpdate, CourseOut
 from app.core.deps import get_current_admin
@@ -9,30 +9,23 @@ from app.core.deps import get_current_admin
 router = APIRouter(prefix="/courses", tags=["Courses"])
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-#PUBLIC
 @router.get("/", response_model=list[CourseOut])
 def get_courses(db: Session = Depends(get_db)):
     return db.query(Course).all()
 
-#ADMIN
+
 @router.post("/", response_model=CourseOut)
 def create_course(
     data: CourseCreate,
     db: Session = Depends(get_db),
     user=Depends(get_current_admin)
 ):
-    course = Course(**data.dict())
+    course = Course(**data.model_dump())
     db.add(course)
     db.commit()
     db.refresh(course)
     return course
+
 
 @router.put("/{course_id}", response_model=CourseOut)
 def update_course(
@@ -46,7 +39,7 @@ def update_course(
     if not course:
         raise HTTPException(404, "Course not found")
 
-    for key, value in data.dict().items():
+    for key, value in data.model_dump(exclude_none=True).items():
         setattr(course, key, value)
 
     db.commit()

@@ -22,7 +22,7 @@
   <body>
     <h1>{{ profile.name }}</h1>
     <p>{{ profile.title }}</p>
-    <p>{{ profile.location }} | {{ profile.email }}</p>
+    <p>{{ profile.location }}{% if profile.email %} | {{ profile.email }}{% endif %}</p>
 
     <div class="section">
       <h2>Summary</h2>
@@ -33,7 +33,7 @@
       <h2>Experience</h2>
       {% for e in experience %}
       <div class="item">
-        <b>{{ e.position }}</b> — {{ e.company }}
+        <b>{{ e.role }}</b> — {{ e.company }}
         <p>{{ e.description }}</p>
       </div>
       {% endfor %}
@@ -60,7 +60,7 @@
     <div class="section">
       <h2>Courses</h2>
       {% for c in courses %}
-      <div class="item"><b>{{ c.title }}</b> — {{ c.institution }}</div>
+      <div class="item"><b>{{ c.title }}</b> — {{ c.platform }}</div>
       {% endfor %}
     </div>
   </body>

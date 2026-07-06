@@ -13,6 +13,7 @@ from app.models.courses import Course
 
 router = APIRouter(prefix="/cv", tags=["CV"])
 
+
 def get_db():
     db = SessionLocal()
     try:

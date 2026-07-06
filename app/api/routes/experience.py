@@ -31,7 +31,7 @@ def update(exp_id: int, data: ExperienceUpdate, db: Session = Depends(get_db), a
     if not exp:
         raise HTTPException(404, "Experience not found")
 
-    for key, value in data.model_dump().items():
+    for key, value in data.model_dump(exclude_none=True).items():
         setattr(exp, key, value)
 
     db.commit()

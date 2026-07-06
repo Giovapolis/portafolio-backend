@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 
 class SkillBase(BaseModel):
@@ -11,8 +12,11 @@ class SkillCreate(SkillBase):
     pass
 
 
-class SkillUpdate(SkillBase):
-    pass
+class SkillUpdate(BaseModel):
+    name: Optional[str] = None
+    level: Optional[int] = None
+    category: Optional[str] = None
+    order: Optional[int] = None
 
 
 class SkillOut(SkillBase):
