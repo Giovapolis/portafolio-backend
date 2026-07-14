@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import auth, blogs, courses, cv, experience, profile, projects, skills, education
+from app.api.routes import auth, blogs, courses, cv, experience, health, profile, projects, skills, education
 
 app = FastAPI(title="CV-WEB API")
 
@@ -12,6 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(profile.router)
 app.include_router(experience.router)

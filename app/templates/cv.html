@@ -3,65 +3,357 @@
   <head>
     <meta charset="utf-8" />
     <style>
+      @page {
+        size: letter;
+        margin: 0.6in 0.5in 0.6in 0.5in;
+        @bottom-center {
+          content: "CV — {{ profile.name }}";
+          font-size: 7pt;
+          color: #94a3b8;
+          font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
       body {
-        font-family: Arial;
-        padding: 10px;
+        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 9.5pt;
+        line-height: 1.5;
+        color: #334155;
       }
-      h1 {
-        margin-bottom: 5px;
+
+      .header {
+        text-align: center;
+        padding-bottom: 18px;
+        border-bottom: 3px solid #1e3a5f;
+        margin-bottom: 18px;
       }
+
+      .header h1 {
+        font-size: 22pt;
+        font-weight: 700;
+        color: #1e3a5f;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+      }
+
+      .header .title {
+        font-size: 12pt;
+        font-weight: 400;
+        color: #475569;
+        margin-bottom: 8px;
+      }
+
+      .contact-bar {
+        font-size: 8.5pt;
+        color: #475569;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px 16px;
+      }
+
+      .contact-bar span { white-space: nowrap; }
+
       .section {
-        margin-top: 15px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
       }
+
+      .section-header {
+        font-size: 11pt;
+        font-weight: 700;
+        color: #1e3a5f;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        border-bottom: 1.5px solid #cbd5e1;
+        padding-bottom: 3px;
+        margin-bottom: 8px;
+      }
+
       .item {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
+      }
+
+      .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 2px;
+      }
+
+      .item-title {
+        font-size: 10.5pt;
+        font-weight: 600;
+        color: #1e293b;
+      }
+
+      .item-subtitle {
+        font-size: 9.5pt;
+        font-weight: 500;
+        color: #475569;
+      }
+
+      .item-date {
+        font-size: 8.5pt;
+        color: #64748b;
+        white-space: nowrap;
+      }
+
+      .item-description {
+        font-size: 9pt;
+        color: #475569;
+        margin-top: 2px;
+        line-height: 1.45;
+      }
+
+      .bio-text {
+        font-size: 9.5pt;
+        color: #475569;
+        line-height: 1.5;
+        text-align: justify;
+      }
+
+      .skills-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 12px;
+        margin-top: 4px;
+      }
+
+      .skill-category {
+        flex: 1 1 180px;
+      }
+
+      .skill-category-label {
+        font-size: 9pt;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 3px;
+      }
+
+      .skill-item {
+        font-size: 8.5pt;
+        color: #475569;
+        margin-bottom: 2px;
+      }
+
+      .skill-bar-bg {
+        display: inline-block;
+        width: 60px;
+        height: 5px;
+        background: #e2e8f0;
+        border-radius: 3px;
+        vertical-align: middle;
+        margin-right: 6px;
+      }
+
+      .skill-bar-fill {
+        height: 100%;
+        background: #1e3a5f;
+        border-radius: 3px;
+      }
+
+      .project-links {
+        font-size: 8pt;
+        margin-top: 2px;
+      }
+
+      .project-links a {
+        color: #2563eb;
+        text-decoration: none;
+      }
+
+      .course-date {
+        font-size: 8pt;
+        color: #64748b;
+      }
+
+      .blog-item {
+        margin-bottom: 8px;
+      }
+
+      .blog-item .item-title {
+        font-size: 9.5pt;
+      }
+
+      .blog-excerpt {
+        font-size: 8.5pt;
+        color: #64748b;
+        margin-top: 1px;
+      }
+
+      .blog-tags {
+        font-size: 7.5pt;
+        color: #94a3b8;
+        margin-top: 1px;
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid #e2e8f0;
+        margin: 10px 0;
       }
     </style>
   </head>
 
   <body>
-    <h1>{{ profile.name }}</h1>
-    <p>{{ profile.title }}</p>
-    <p>{{ profile.location }}{% if profile.email %} | {{ profile.email }}{% endif %}</p>
-
-    <div class="section">
-      <h2>Summary</h2>
-      <p>{{ profile.bio }}</p>
+    <div class="header">
+      <h1>{{ profile.name }}</h1>
+      <div class="title">{{ profile.title }}</div>
+      <div class="contact-bar">
+        {% if profile.email %}
+          <span>&#9993; {{ profile.email }}</span>
+        {% endif %}
+        {% if profile.phone %}
+          <span>&#9742; {{ profile.phone }}</span>
+        {% endif %}
+        {% if profile.location %}
+          <span>&#9906; {{ profile.location }}</span>
+        {% endif %}
+        {% if profile.website %}
+          <span>&#127760; {{ profile.website }}</span>
+        {% endif %}
+        {% if profile.github %}
+          <span>&#9733; {{ profile.github }}</span>
+        {% endif %}
+        {% if profile.linkedin %}
+          <span>&#128100; {{ profile.linkedin }}</span>
+        {% endif %}
+      </div>
     </div>
 
+    {% if profile.bio %}
     <div class="section">
-      <h2>Experience</h2>
+      <div class="section-header">Professional Summary</div>
+      <div class="bio-text">{{ profile.bio }}</div>
+    </div>
+    {% endif %}
+
+    {% if experience %}
+    <div class="section">
+      <div class="section-header">Experience</div>
       {% for e in experience %}
       <div class="item">
-        <b>{{ e.role }}</b> — {{ e.company }}
-        <p>{{ e.description }}</p>
+        <div class="item-header">
+          <span>
+            <span class="item-title">{{ e.role }}</span>
+            {% if e.company %} &mdash; <span class="item-subtitle">{{ e.company }}</span>{% endif %}
+          </span>
+          <span class="item-date">
+            {{ e.start_date }} &ndash; {% if e.end_date %}{{ e.end_date }}{% else %}Present{% endif %}
+          </span>
+        </div>
+        {% if e.description %}
+        <div class="item-description">{{ e.description }}</div>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
+    {% endif %}
 
+    {% if education %}
     <div class="section">
-      <h2>Projects</h2>
+      <div class="section-header">Education</div>
+      {% for e in education %}
+      <div class="item">
+        <div class="item-header">
+          <span>
+            <span class="item-title">{{ e.degree }}</span>
+            {% if e.institution %} &mdash; <span class="item-subtitle">{{ e.institution }}</span>{% endif %}
+          </span>
+          {% if e.year %}<span class="item-date">{{ e.year }}</span>{% endif %}
+        </div>
+        {% if e.description %}
+        <div class="item-description">{{ e.description }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if skills_by_category %}
+    <div class="section">
+      <div class="section-header">Skills</div>
+      <div class="skills-grid">
+        {% for category, category_skills in skills_by_category.items() %}
+        <div class="skill-category">
+          <div class="skill-category-label">{{ category }}</div>
+          {% for s in category_skills %}
+          <div class="skill-item">
+            {{ s.name }}
+            {% if s.level %}
+            <span class="skill-bar-bg">
+              <span class="skill-bar-fill" style="width: {{ s.level }}%"></span>
+            </span>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if projects %}
+    <div class="section">
+      <div class="section-header">Projects</div>
       {% for p in projects %}
       <div class="item">
-        <b>{{ p.title }}</b>
-        <p>{{ p.description }}</p>
+        <div class="item-header">
+          <span class="item-title">{{ p.title }}</span>
+        </div>
+        {% if p.description %}
+        <div class="item-description">{{ p.description }}</div>
+        {% endif %}
+        {% if p.repo_url or p.demo_url %}
+        <div class="project-links">
+          {% if p.repo_url %}&#128279; <a href="{{ p.repo_url }}">Repository</a>{% endif %}
+          {% if p.repo_url and p.demo_url %} &middot; {% endif %}
+          {% if p.demo_url %}&#128279; <a href="{{ p.demo_url }}">Demo</a>{% endif %}
+        </div>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
+    {% endif %}
 
+    {% if courses %}
     <div class="section">
-      <h2>Skills</h2>
-      <p>
-        {% for s in skills %} {{ s.name }}{% if not loop.last %}, {% endif %} {%
-        endfor %}
-      </p>
-    </div>
-
-    <div class="section">
-      <h2>Courses</h2>
+      <div class="section-header">Courses</div>
       {% for c in courses %}
-      <div class="item"><b>{{ c.title }}</b> — {{ c.platform }}</div>
+      <div class="item">
+        <div class="item-header">
+          <span>
+            <span class="item-title">{{ c.title }}</span>
+            {% if c.platform %} &mdash; <span class="item-subtitle">{{ c.platform }}</span>{% endif %}
+          </span>
+          {% if c.date %}<span class="item-date">{{ c.date }}</span>{% endif %}
+        </div>
+      </div>
       {% endfor %}
     </div>
+    {% endif %}
+
+    {% if blog %}
+    <div class="section">
+      <div class="section-header">Blog Posts</div>
+      {% for b in blog %}
+      <div class="blog-item">
+        <div class="item-header">
+          <span class="item-title">{{ b.title }}</span>
+          {% if b.created_at %}<span class="item-date">{{ b.created_at[:7] if b.created_at is string else b.created_at.strftime('%b %Y') }}</span>{% endif %}
+        </div>
+        {% if b.excerpt %}
+        <div class="blog-excerpt">{{ b.excerpt }}</div>
+        {% endif %}
+        {% if b.tags %}
+        <div class="blog-tags">{{ ', '.join(b.tags) }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
   </body>
 </html>
