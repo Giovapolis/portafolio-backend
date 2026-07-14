@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    container_name: portafolio-backend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    networks:
+      - giovapolis
+
+networks:
+  giovapolis:
+    driver: bridge
