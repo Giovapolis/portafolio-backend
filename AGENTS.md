@@ -3,8 +3,10 @@
 ## Commands
 - `uvicorn app.main:app --reload` — Start dev server at `http://localhost:8000`
 - `python -m app.db.init_db` — Create tables + seed admin user (`Giovapolis` / `GioAdmin2026`)
-- No linter, formatter, or CI configured
 - Tests: `pytest` (runs `tests/`)
+- Docker: `docker compose up --build`
+- CI/CD: Push to `master` → GitHub Actions builds & pushes to `ghcr.io/giovapolis/portafolio-backend:latest`
+- Deploy: On server → `sudo bash /srv/repositories/giovapolis-server/scripts/deploy-portafolio.sh`
 
 ## Tech Stack
 - **Framework**: FastAPI (Python 3.12)
