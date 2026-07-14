@@ -4,10 +4,36 @@ services:
     container_name: portafolio-backend
     restart: unless-stopped
     env_file: .env
+    environment:
+      DATABASE_URL: postgresql://cv_user:CHANGE_ME@postgres:5432/portafolio
     ports:
       - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - giovapolis
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: portafolio-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: cv_user
+      POSTGRES_PASSWORD: CHANGE_ME
+      POSTGRES_DB: portafolio
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - giovapolis
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cv_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
 
 networks:
   giovapolis:
