@@ -1,0 +1,14 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.git/
+.gitignore
+.DS_Store
+.vs/
+.idea/
+.vscode/
+*.md
+AGENTS.md
