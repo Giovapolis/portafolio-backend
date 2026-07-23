@@ -18,7 +18,7 @@ def get_skills(db: Session = Depends(get_db)):
 def create_skill(
     data: SkillCreate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     skill = Skill(**data.model_dump())
     db.add(skill)
@@ -32,7 +32,7 @@ def update_skill(
     skill_id: int,
     data: SkillUpdate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     skill = db.query(Skill).get(skill_id)
 
@@ -51,7 +51,7 @@ def update_skill(
 def delete_skill(
     skill_id: int,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     skill = db.query(Skill).get(skill_id)
 

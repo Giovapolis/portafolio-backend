@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
-from app.db.session import SessionLocal
+from app.db.session import get_db
 from app.services.pdf_service import generate_cv_pdf
 
 from app.models.profile import Profile
@@ -14,14 +14,6 @@ from app.models.education import Education
 from app.models.blog import Blog
 
 router = APIRouter(prefix="/cv", tags=["CV"])
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.get("/pdf")

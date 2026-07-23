@@ -139,11 +139,17 @@ tests/                          # pytest tests
 
 ## Key Quirks & Notes
 - **Dual routers**: `auth.py` exports both `router_auth` (`/auth/*`) and `router_users` — but only `router_auth` is mounted. `profile.py` exports `router_singular` (`/profile/*`) and `router_plural` — only `router_singular` is mounted in `main.py`.
-- **`cv.py` defines its own `get_db()`** using `SessionLocal()` directly instead of importing from `app.db.session` — intentional but inconsistent.
+- **`cv.py` used to define its own `get_db()`** — now imports `get_db` from `app.db.session` (fixed).
+- **No authentication/authorization separation** — `get_current_admin` is both authn + authz; any authenticated user is an admin.
+- **Auth guard**: `get_current_admin` in `core/deps.py` extracts Bearer token, decodes JWT with `JWTError` catch (not bare `except:`), looks up user by `sub` (username), and validates `username is not None`.
+- **Login endpoint**: performs dummy password verification when username does not exist (timing-attack mitigation) using `_DUMMY_HASH`.
+- **Password hashing**: SHA256-prehashed bcrypt (`hashlib.sha256` + `bcrypt.hashpw`). `verify_password` uses only the prehashed path (no fallback to plain-text encode — fixed).
+- **CORS**: `allow_origins` explicitly set to `["https://giovapolis.duckdns.org", "http://localhost:3000", "http://localhost:5173"]` with `allow_credentials=True` (avoids wildcard+credentials spec violation). `expose_headers=["Content-Disposition"]` added for PDF download.
+- **Global exception handler** in `main.py` catches unhandled exceptions and returns `500 {"detail": "Internal server error"}`.
+- **`init_db.py`** now creates default profile even when admin user already exists (not only on first run).
+- **Auth dependency naming** standardized to `admin=Depends(get_current_admin)` across all route files.
 - **PDF** requires a working GTK/Cairo install on Windows (WeasyPrint dependency).
 - **Alembic** is in `requirements.txt` but no migrations directory exists — schema managed via `Base.metadata.create_all()`.
-- **No CORS restrictions** — `allow_origins=["*"]`.
 - **Env** via `python-dotenv` in `app/core/config.py` — copy `.env.example` to `.env`.
 - **Pydantic v2**: use `model_validate()` not `from_orm()`; `from_attributes = True` not `orm_mode`; use `model_dump()` not `.dict()` for new code.
 - **`repositories/` directory exists but is empty** — data access goes directly through route handlers with `db.query(...)`.
-- **Auth guard**: `get_current_admin` in `core/deps.py` extracts Bearer token, decodes JWT, looks up user by `sub` (username).

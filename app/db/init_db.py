@@ -38,23 +38,23 @@ def init():
             print(f"Admin user created: {ADMIN_USER}")
             print(f"   Email: {ADMIN_EMAIL}")
             print(f"   Password: {ADMIN_PASS}")
-
-            profile = db.query(Profile).first()
-            if not profile:
-                profile = Profile(
-                    name="Your Name",
-                    title="Your Title",
-                    bio="Your bio goes here",
-                    email=ADMIN_EMAIL,
-                    github="https://github.com/yourusername",
-                    linkedin="https://linkedin.com/in/yourusername",
-                    location="Your Location"
-                )
-                db.add(profile)
-                db.commit()
-                print("Default profile created")
         else:
             print(f"Admin user already exists: {ADMIN_USER}")
+
+        profile = db.query(Profile).first()
+        if not profile:
+            profile = Profile(
+                name="Your Name",
+                title="Your Title",
+                bio="Your bio goes here",
+                email=ADMIN_EMAIL,
+                github="https://github.com/yourusername",
+                linkedin="https://linkedin.com/in/yourusername",
+                location="Your Location"
+            )
+            db.add(profile)
+            db.commit()
+            print("Default profile created")
 
     finally:
         db.close()

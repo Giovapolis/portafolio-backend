@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException, status
-from jose import jwt
+from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 
@@ -15,8 +15,10 @@ def get_current_admin(
 ):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username = payload.get("sub")
-    except:
+        username: str | None = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Token inválido")
+    except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
 
     user = db.query(User).filter(User.username == username).first()

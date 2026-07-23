@@ -4,11 +4,13 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from app.db.session import get_db
 from app.models.user import User
-from app.core.security import verify_password, create_access_token
+from app.core.security import hash_password, verify_password, create_access_token
 from app.core.deps import get_current_admin
 from app.schemas.user import UserOut, TokenResponse
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
+
+_DUMMY_HASH = hash_password("dummy-timing-attack-prevention")
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -16,6 +18,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     user = db.query(User).filter(User.username == form_data.username).first()
 
     if not user:
+        verify_password(form_data.password, _DUMMY_HASH)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",

@@ -33,7 +33,7 @@ def get_post(slug: str, db: Session = Depends(get_db)):
 def create_post(
     data: BlogCreate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     existing = db.query(Blog).filter(Blog.slug == data.slug).first()
     if existing:
@@ -51,7 +51,7 @@ def update_post(
     post_id: int,
     data: BlogUpdate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     post = db.query(Blog).get(post_id)
 
@@ -70,7 +70,7 @@ def update_post(
 def delete_post(
     post_id: int,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     post = db.query(Blog).get(post_id)
 

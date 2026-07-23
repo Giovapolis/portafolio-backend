@@ -28,7 +28,7 @@ def get_project(project_id: int, db: Session = Depends(get_db)):
 def create_project(
     data: ProjectCreate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     project = Project(**data.model_dump())
     db.add(project)
@@ -42,7 +42,7 @@ def update_project(
     project_id: int,
     data: ProjectUpdate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     project = db.query(Project).get(project_id)
 
@@ -61,7 +61,7 @@ def update_project(
 def delete_project(
     project_id: int,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     project = db.query(Project).get(project_id)
 

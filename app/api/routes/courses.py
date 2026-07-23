@@ -18,7 +18,7 @@ def get_courses(db: Session = Depends(get_db)):
 def create_course(
     data: CourseCreate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     course = Course(**data.model_dump())
     db.add(course)
@@ -32,7 +32,7 @@ def update_course(
     course_id: int,
     data: CourseUpdate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     course = db.query(Course).get(course_id)
 
@@ -51,7 +51,7 @@ def update_course(
 def delete_course(
     course_id: int,
     db: Session = Depends(get_db),
-    user=Depends(get_current_admin)
+    admin=Depends(get_current_admin)
 ):
     course = db.query(Course).get(course_id)
 
